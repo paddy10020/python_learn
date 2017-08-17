@@ -67,10 +67,17 @@ Flask-SQLAlchemy是Flask的一个ORM插件。
 * 查询
 
   ```python
+  在查询的时候一定要用到all或first或limit，否者只会生成sql语句，不会生成orm对象
   # 读取所有用户
   users = User.query.all()
   # 搜索username为xxx的第一个结果
-  user = User.query.filter_by(username = 'xxxx').first()
+  users = User.query.filter_by(username = 'xxxx').first()
+  # 需要用到order_by的时候
+  users = User.query.filter_by(username = 'xxx', ...).order_by('id desc').all()
+  # 或者
+  from sqlalchemy import desc
+  users = User.query.filter_by(username = 'xxx', ...).order_by(desc.(User.id)).all()
+
   ```
 
 
@@ -123,6 +130,23 @@ Flask-SQLAlchemy是Flask的一个ORM插件。
       return render_template('show_user.html', user=user)
   ```
 
+* 使用sql语句
+
+  ```python
+  from xx import db
+  def xxxx(xxxx):
+  	sql = '''
+  	SELECT xxx,xxx,xxx
+  	FROM xxx
+  	WHERE xxx=xxx AND
+  	ORDER BY xxxx,..
+  	'''
+  	data = db.session.execute(sql)
+      # 如果对数据进行了插入和修改操作，要提交才会写入到数据库
+      db.session.commit()
+
+  ```
+
   ​
 
 ###  引用上下文
@@ -139,5 +163,15 @@ def create_app():
     app = Flask(__name__)
     db.init_app(app)
     return app
+```
+
+
+
+### 迁移数据到flask项目中
+
+```shell
+python manage.py db init  # 初始化要迁移的数据库如果已经init就不需要了，当migrate出错的时候可以删除migrations文件夹，然后重新init(migrations文件夹只是记录数据表的信息而已，不会影响到数据库的，可以随便删除)
+python manage.py db migrate  # 迁移数据库
+python manage.py db upgrade  # 升级数据库
 ```
 

@@ -25,9 +25,10 @@
 >  |-requirements.txt
 >  |-config.py
 >  |-manage.py
+>  |-command.py
 >```
 
-项目有四个顶层目录：
+项目有八个顶层目录：
 
 * app的目录下是放Flask应用
 * migrations目录包含数据库迁移脚本
@@ -36,6 +37,7 @@
 * requirements.txt是Python运行的依赖包列表
 * config.py是配置设置脚本
 * manage.py 用于启动应用程序和其他应用程序任务
+* command.py 控制
 
 
 
@@ -259,4 +261,8 @@ manager.add_command("db", MigrateCommand)
 if __name__ == "__main__":
     manager.run()
 ```
+
+
+
+#### command.py
 
